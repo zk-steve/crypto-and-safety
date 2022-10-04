@@ -5,7 +5,7 @@ import {
     IonIcon, IonInput, IonItem, IonItemDivider, IonLabel,
     IonList,
     IonMenuButton,
-    IonPage, IonReorder, IonReorderGroup, IonText,
+    IonPage, IonReorder, IonReorderGroup, IonText, IonTextarea,
     IonTitle,
     IonToolbar, ItemReorderEventDetail
 } from '@ionic/react';
@@ -21,44 +21,19 @@ const PrimeNumber: React.FC = () => {
         setResult(RandomPrime(Math.ceil(number * 10 / 3), 10).toString());
     }
 
-    function doReorder(event: CustomEvent<ItemReorderEventDetail>) {
-        // The `from` and `to` properties contain the index of the item
-        // when the drag started and ended, respectively
-        console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
-
-        // Finish the reorder and position the item in the DOM based on
-        // where the gesture ended. This method can also be called directly
-        // by the reorder group
-        event.detail.complete();
-    }
 
     return (
-        <IonReorderGroup disabled={false} onIonItemReorder={doReorder}>
-            <IonItem>
-                <IonLabel position="stacked">Số chữ số</IonLabel>
-                <IonInput type="number" onIonChange={e => setNumber(parseInt(e.detail.value!, 10))} value={number}
-                          clearInput inputmode={"numeric"}> </IonInput>
-                <IonButton onClick={getNumber}>Xử lý</IonButton>
-                <IonText color="success">
-                    <h3>{result}</h3>
-                </IonText>
-                <IonReorder slot="end">
-                    <IonIcon icon={pizza}/>
-                </IonReorder>
-            </IonItem>
-            <IonItem>
-                <IonLabel position="stacked">Số chữ số</IonLabel>
-                <IonInput type="number" onIonChange={e => setNumber(parseInt(e.detail.value!, 10))} value={number}
-                          clearInput inputmode={"numeric"}> </IonInput>
-                <IonButton onClick={getNumber}>Xử lý</IonButton>
-                <IonText color="success">
-                    <h3>{result}</h3>
-                </IonText>
-                <IonReorder slot="end">
-                    <IonIcon icon={pizza}/>
-                </IonReorder>
-            </IonItem>
-        </IonReorderGroup>
+        <IonItem>
+            <IonLabel position="stacked">Số nguyên tố: Số chữ số</IonLabel>
+            <IonInput type="number" onIonChange={e => setNumber(parseInt(e.detail.value!, 10))} value={number}
+                      clearInput inputmode={"numeric"}> </IonInput>
+            <IonButton onClick={getNumber} slot="end" size="default">Xử lý</IonButton>
+            <IonTextarea color="success" value={result} readonly autoGrow>
+            </IonTextarea>
+            <IonReorder slot="end">
+                <IonIcon icon={pizza}/>
+            </IonReorder>
+        </IonItem>
     );
 };
 
