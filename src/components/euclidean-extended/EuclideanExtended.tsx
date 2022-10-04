@@ -8,6 +8,67 @@ import './EuclideanExtended.css';
 import {useState} from "react";
 import {pizza} from "ionicons/icons";
 
+export const CalEuclideanExtended = (a: string, n: string) => {
+    let _a = BigInt(a);
+    let _b = BigInt(n);
+    if (_b === BigInt(0)) {
+        let d = _a;
+        let x = BigInt(1);
+        let y = BigInt(0);
+        return {d: d.toString(), x: x.toString(), y: y.toString(), xEx: [x.toString()], yEx: [y.toString()]}
+    } else {
+        let x2 = BigInt(1);
+        let x1 = BigInt(0);
+        let y2 = BigInt(0);
+        let y1 = BigInt(1);
+        const _x1Ex = [x1.toString()];
+        const _x2Ex = [x2.toString()];
+        const _y1Ex = [y1.toString()];
+        const _y2Ex = [y2.toString()];
+        const _aEx = [_a.toString()];
+        const _bEx = [_b.toString()];
+        const _qEx = ["-"];
+        const _rEx = ["-"];
+        const _xEx = ["-"];
+        const _yEx = ["-"];
+        while (_b > 0) {
+            let q = _a / _b;
+            let r = _a % _b;
+            let x = x2 - q * x1;
+            let y = y2 - q * y1;
+            _a = _b;
+            _b = r;
+            x2 = x1;
+            x1 = x;
+            y2 = y1;
+            y1 = y;
+            _qEx.push(q.toString());
+            _rEx.push(r.toString());
+            _xEx.push(x.toString());
+            _yEx.push(y.toString());
+            _x1Ex.push(x1.toString());
+            _x2Ex.push(x2.toString());
+            _y1Ex.push(y1.toString());
+            _y2Ex.push(y2.toString());
+            _aEx.push(_a.toString());
+            _bEx.push(_b.toString());
+        }
+        return {
+            d: _a.toString(),
+            x: _x2Ex[_x2Ex.length - 1],
+            y: _y2Ex[_y2Ex.length - 1],
+            xEx: _xEx,
+            yEx: _yEx, qEx: _qEx,
+            rEx: _rEx, aEx: _aEx,
+            nEx: _bEx,
+            x1Ex: _x1Ex,
+            x2Ex: _x2Ex,
+            y1Ex: _y1Ex,
+            y2Ex: _y2Ex
+        }
+    }
+}
+
 const EuclideanExtended: React.FC = () => {
     const [a, setA] = useState<string>("635");
     const [n, setN] = useState<string>("737");
@@ -26,69 +87,32 @@ const EuclideanExtended: React.FC = () => {
     const [yEx, setYEx] = useState<string[]>([]);
 
     const getNumber = () => {
-        let _a = BigInt(a);
-        let _b = BigInt(n);
-        if (_b === BigInt(0)) {
-            let d = _a;
-            let x = BigInt(1);
-            let y = BigInt(0);
-            setResultD(d.toString());
-            setResultX(x.toString());
-            setResultY(y.toString());
-            setXEx([x.toString()]);
-            setYEx([y.toString()]);
-        } else {
-            let x2 = BigInt(1);
-            let x1 = BigInt(0);
-            let y2 = BigInt(0);
-            let y1 = BigInt(1);
-            const _x1Ex = [x1.toString()];
-            const _x2Ex = [x2.toString()];
-            const _y1Ex = [y1.toString()];
-            const _y2Ex = [y2.toString()];
-            const _aEx = [_a.toString()];
-            const _bEx = [_b.toString()];
-            const _qEx = ["-"];
-            const _rEx = ["-"];
-            const _xEx = ["-"];
-            const _yEx = ["-"];
-            while (_b > 0) {
-                let q = _a / _b;
-                let r = _a % _b;
-                let x = x2 - q * x1;
-                let y = y2 - q * y1;
-                _a = _b;
-                _b = r;
-                x2 = x1;
-                x1 = x;
-                y2 = y1;
-                y1 = y;
-                _qEx.push(q.toString());
-                _rEx.push(r.toString());
-                _xEx.push(x.toString());
-                _yEx.push(y.toString());
-                _x1Ex.push(x1.toString());
-                _x2Ex.push(x2.toString());
-                _y1Ex.push(y1.toString());
-                _y2Ex.push(y2.toString());
-                _aEx.push(_a.toString());
-                _bEx.push(_b.toString());
-            }
-            setResultD(_a.toString());
-            setResultX(_x2Ex[_x2Ex.length - 1]);
-            setResultY(_y2Ex[_y2Ex.length - 1]);
-            setXEx(_xEx);
-            setYEx(_yEx);
-            setX1Ex(_x1Ex);
-            setX2Ex(_x2Ex);
-            setY1Ex(_y1Ex);
-            setY2Ex(_y2Ex);
-            setQEx(_qEx);
-            setREx(_rEx);
-            setAEx(_aEx);
-            setNEx(_bEx);
-
-        }
+        const {
+            d,
+            x,
+            y,
+            xEx,
+            yEx,
+            rEx,
+            nEx,
+            x1Ex,
+            x2Ex,
+            y1Ex,
+            y2Ex
+        } = CalEuclideanExtended(a, n);
+        setResultD(d);
+        setResultX(x);
+        setResultY(y);
+        setXEx(xEx);
+        setYEx(yEx);
+        setX1Ex(x1Ex ?? []);
+        setX2Ex(x2Ex ?? []);
+        setY1Ex(y1Ex ?? []);
+        setY2Ex(y2Ex ?? []);
+        setQEx(qEx);
+        setREx(rEx ?? []);
+        setAEx(aEx);
+        setNEx(nEx ?? []);
         // setResult(RandomPrime(Math.ceil(number * 10 / 3), 10).toString());
     }
 

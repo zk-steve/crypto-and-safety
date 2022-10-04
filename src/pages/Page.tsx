@@ -13,15 +13,22 @@ import {useParams} from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
 import PrimeNumber from "../components/prime-number/PrimeNumber";
-import {useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import Inverse from "../components/inverse/Inverse";
 import EuclideanExtended from "../components/euclidean-extended/EuclideanExtended";
+import {PrimeFactorsTo} from "../components/CalPrimeTable";
+import ModularExponentiation from "../components/modular-exponentiation/ModularExponentiation";
+import PrimitiveCyclic from "../components/primitive-cyclic/PrimitiveCyclic";
+
 
 const Page: React.FC = () => {
     const doReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
         event.detail.complete();
     }
-
+    const [prime, setPrime] = useState<number[]>([]);
+    useEffect(() => {
+        // setPrime(PrimeFactorsTo(99999999));
+    }, []);
     const [components, setComponents] = useState<any[]>([]);
     return (
         <IonPage>
@@ -37,6 +44,17 @@ const Page: React.FC = () => {
                     <IonButton onClick={() => {
                         setComponents([...components, (<Inverse></Inverse>)])
                     }} slot="end" size="default">Nghịch đảo</IonButton>
+                    <IonButton onClick={() => {
+                        setComponents([...components, (
+                            <ModularExponentiation></ModularExponentiation>)])
+                    }} slot="end" size="default">Luỹ thừa</IonButton>
+                    <IonButton onClick={() => {
+                        setComponents([...components, (
+                            <PrimitiveCyclic primeData={prime}></PrimitiveCyclic>)])
+                    }} slot="end" size="default">Nguyên thuỷ</IonButton>
+                    <IonButton onClick={() => {
+                        setComponents([])
+                    }} slot="end" size="default">Xoá</IonButton>
                     {/*<IonButton onClick={() => {*/}
                     {/*    setComponents([...components, (<EuclideanExtended></EuclideanExtended>)])*/}
                     {/*}} slot="end" size="default">Euclidean mở rộng</IonButton>*/}
