@@ -14,6 +14,8 @@ import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
 import PrimeNumber from "../components/prime-number/PrimeNumber";
 import {useState} from "react";
+import Inverse from "../components/inverse/Inverse";
+import EuclideanExtended from "../components/euclidean-extended/EuclideanExtended";
 
 const Page: React.FC = () => {
     const doReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
@@ -32,6 +34,12 @@ const Page: React.FC = () => {
                     <IonButton onClick={() => {
                         setComponents([...components, (<PrimeNumber></PrimeNumber>)])
                     }} slot="end" size="default">Số nguyên tố</IonButton>
+                    <IonButton onClick={() => {
+                        setComponents([...components, (<Inverse></Inverse>)])
+                    }} slot="end" size="default">Nghịch đảo</IonButton>
+                    {/*<IonButton onClick={() => {*/}
+                    {/*    setComponents([...components, (<EuclideanExtended></EuclideanExtended>)])*/}
+                    {/*}} slot="end" size="default">Euclidean mở rộng</IonButton>*/}
                 </IonToolbar>
             </IonHeader>
 
@@ -43,11 +51,6 @@ const Page: React.FC = () => {
                 {/*</IonHeader>*/}
                 <IonReorderGroup disabled={false} onIonItemReorder={doReorder}>
                     {components}
-                    {/*{components.map((e) => {*/}
-                    {/*    if (e.type == 'prime') return (<PrimeNumber></PrimeNumber>);*/}
-                    {/*})}*/}
-                    {/*<PrimeNumber></PrimeNumber>*/}
-                    {/*<PrimeNumber></PrimeNumber>*/}
                 </IonReorderGroup>
                 {/*<ExploreContainer name={name} />*/}
             </IonContent>

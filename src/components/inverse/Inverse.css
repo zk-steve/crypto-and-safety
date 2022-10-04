@@ -1,0 +1,8 @@
+.my-col {
+    border: 1px solid grey;
+    text-align: right;
+}
+
+.my-grid {
+    --ion-grid-columns: 20;
+}
