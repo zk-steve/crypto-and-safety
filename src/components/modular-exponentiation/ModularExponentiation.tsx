@@ -8,7 +8,7 @@ import './ModularExponentiation.css';
 import {useState} from "react";
 import {pizza} from "ionicons/icons";
 
-const CalModularExponentiation = (b: string, n: string, m: string): { result: string, aEx: string[], aiEx: string[], xEx: string[], powerEx: string[] } => {
+export const CalModularExponentiation = (b: string, n: string, m: string): { result: string, aEx: string[], aiEx: string[], xEx: string[], powerEx: string[] } => {
     let power = BigInt(b) % BigInt(m);
     const aEx = [];
     const aiEx = [];

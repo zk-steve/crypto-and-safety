@@ -20,8 +20,7 @@ import {PrimeFactorsTo} from "../../components/CalPrimeTable";
 import ModularExponentiation from "../../components/modular-exponentiation/ModularExponentiation";
 import PrimitiveCyclic from "../../components/primitive-cyclic/PrimitiveCyclic";
 import RSACom from '../../components/rsa/rsa';
-import EncryptRSA from '../../components/rsa/EncryptRSA';
-import DecryptRSA from '../../components/rsa/DecryptRSA';
+import {DecryptRSA, EncryptRSA} from '../../components/rsa/EncryptRSA';
 
 
 const RSA: React.FC = () => {
@@ -50,6 +49,9 @@ const RSA: React.FC = () => {
                      <IonButton onClick={() => {
                         setComponents([...components, (<DecryptRSA></DecryptRSA>)])
                     }} slot="end" size="default">Giải mã</IonButton>
+                  <IonButton onClick={() => {
+                      setComponents([])
+                  }} slot="end" size="default">Xoá</IonButton>
               </IonToolbar>
           </IonHeader>
 
