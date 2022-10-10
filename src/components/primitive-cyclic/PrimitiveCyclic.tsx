@@ -9,7 +9,7 @@ import {useState} from "react";
 import {pizza} from "ionicons/icons";
 import {CalEuclideanExtended} from "../euclidean-extended/EuclideanExtended";
 
-const CalPrimitives = (p: string, start: string, end: string, primeData: number[]): { result: string[] } => {
+export const CalPrimitives = (p: string, start: string, end: string): { result: string[] } => {
     const result : string[]= [];
     for (let i = BigInt(start); i <= BigInt(end); i++){
         const {d} = CalEuclideanExtended(i.toString(), p);
@@ -29,7 +29,7 @@ const PrimitiveCyclic: React.FC<{ primeData: number[] }> = ({primeData}) => {
     const [powerEx, setPowerEx] = useState<string[]>([]);
 
     const getNumber = () => {
-        const {result} = CalPrimitives(p, start, end, primeData);
+        const {result} = CalPrimitives(p, start, end);
         setResult(result);
     }
 

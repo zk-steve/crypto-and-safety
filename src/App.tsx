@@ -22,6 +22,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import RSA from './pages/rsa/rsa';
 
 setupIonicReact();
 
@@ -34,6 +35,9 @@ const App: React.FC = () => {
           <IonRouterOutlet id="main">
             <Route path="/" exact={true}>
               <Redirect to="/page/Home" />
+            </Route>
+            <Route path="/rsa" exact={true}>
+              <RSA />
             </Route>
             <Route path="/page/:name" exact={true}>
               <Page />

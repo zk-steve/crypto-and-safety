@@ -43,12 +43,12 @@ const appPages: AppPage[] = [
     iosIcon: homeOutline,
     mdIcon: homeSharp
   },
-  // {
-  //   title: 'Outbox',
-  //   url: '/page/NewItem',
-  //   iosIcon: paperPlaneOutline,
-  //   mdIcon: paperPlaneSharp
-  // },
+  {
+    title: 'RSA',
+    url: '/rsa',
+    iosIcon: paperPlaneOutline,
+    mdIcon: paperPlaneSharp
+  },
   // {
   //   title: 'Favorites',
   //   url: '/page/Favorites',

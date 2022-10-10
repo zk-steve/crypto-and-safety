@@ -14,6 +14,90 @@ import {useState} from "react";
 import {RandomPrime} from "../../lib/random-prime";
 import {pizza} from "ionicons/icons";
 
+export const CalInverse = (a: string, n: string) => {
+    let result = {
+        d : "",
+        x : "",
+        y : "",
+        inverse : "",
+        xEx : [""],
+        yEx : [""],        
+        x1Ex : [""],
+        y1Ex : [""],
+        x2Ex : [""],
+        y2Ex : [""],
+        qEx : [""],
+        rEx : [""],
+        aEx : [""],
+        nEx : [""],
+    }
+    let _a = BigInt(a);
+    let _b = BigInt(n);
+    if (_b === BigInt(0)) {
+        let d = _a;
+        let x = BigInt(1);
+        let y = BigInt(0);
+        result.d = (d.toString());
+        result.x = (x.toString());
+        result.y = (y.toString());
+        result.xEx = ([x.toString()]);
+        result.yEx = ([y.toString()]);
+    } else {
+        let x2 = BigInt(1);
+        let x1 = BigInt(0);
+        let y2 = BigInt(0);
+        let y1 = BigInt(1);
+        const _x1Ex = [x1.toString()];
+        const _x2Ex = [x2.toString()];
+        const _y1Ex = [y1.toString()];
+        const _y2Ex = [y2.toString()];
+        const _aEx = [_a.toString()];
+        const _bEx = [_b.toString()];
+        const _qEx = ["-"];
+        const _rEx = ["-"];
+        const _xEx = ["-"];
+        const _yEx = ["-"];
+        while (_b > 0) {
+            let q = _a / _b;
+            let r = _a % _b;
+            let x = x2 - q * x1;
+            let y = y2 - q * y1;
+            _a = _b;
+            _b = r;
+            x2 = x1;
+            x1 = x;
+            y2 = y1;
+            y1 = y;
+            _qEx.push(q.toString());
+            _rEx.push(r.toString());
+            _xEx.push(x.toString());
+            _yEx.push(y.toString());
+            _x1Ex.push(x1.toString());
+            _x2Ex.push(x2.toString());
+            _y1Ex.push(y1.toString());
+            _y2Ex.push(y2.toString());
+            _aEx.push(_a.toString());
+            _bEx.push(_b.toString());
+        }
+        result.d = (_a.toString());
+        result.x = (x2.toString());
+        result.y = (y2.toString());
+        result.inverse = ((x2 < 0 ? x2 + BigInt(n) : x2).toString());
+        result.xEx = (_xEx);
+        result.yEx = (_yEx);
+        result.x1Ex = (_x1Ex);
+        result.x2Ex = (_x2Ex);
+        result.y1Ex = (_y1Ex);
+        result.y2Ex = (_y2Ex);
+        result.qEx = (_qEx);
+        result.rEx = (_rEx);
+        result.aEx = (_aEx);
+        result.nEx = (_bEx);
+    }
+    return result;
+} 
+
+
 const Inverse: React.FC = () => {
     const [a, setA] = useState<string>("635");
     const [n, setN] = useState<string>("737");
@@ -34,73 +118,22 @@ const Inverse: React.FC = () => {
     const [yEx, setYEx] = useState<string[]>([]);
 
     const getNumber = () => {
-        let _a = BigInt(a);
-        let _b = BigInt(n);
-        if (_b === BigInt(0)) {
-            let d = _a;
-            let x = BigInt(1);
-            let y = BigInt(0);
-            setResultD(d.toString());
-            setResultX(x.toString());
-            setResultY(y.toString());
-            setXEx([x.toString()]);
-            setYEx([y.toString()]);
-        } else {
-            let x2 = BigInt(1);
-            let x1 = BigInt(0);
-            let y2 = BigInt(0);
-            let y1 = BigInt(1);
-            const _x1Ex = [x1.toString()];
-            const _x2Ex = [x2.toString()];
-            const _y1Ex = [y1.toString()];
-            const _y2Ex = [y2.toString()];
-            const _aEx = [_a.toString()];
-            const _bEx = [_b.toString()];
-            const _qEx = ["-"];
-            const _rEx = ["-"];
-            const _xEx = ["-"];
-            const _yEx = ["-"];
-            while (_b > 0) {
-                let q = _a / _b;
-                let r = _a % _b;
-                let x = x2 - q * x1;
-                let y = y2 - q * y1;
-                _a = _b;
-                _b = r;
-                x2 = x1;
-                x1 = x;
-                y2 = y1;
-                y1 = y;
-                _qEx.push(q.toString());
-                _rEx.push(r.toString());
-                _xEx.push(x.toString());
-                _yEx.push(y.toString());
-                _x1Ex.push(x1.toString());
-                _x2Ex.push(x2.toString());
-                _y1Ex.push(y1.toString());
-                _y2Ex.push(y2.toString());
-                _aEx.push(_a.toString());
-                _bEx.push(_b.toString());
-            }
-            setResultD(_a.toString());
-            setResultX(x2.toString());
-            setResultY(y2.toString());
-            setResultInverse((x2 < 0 ? x2 + BigInt(n) : x2).toString());
-            setXEx(_xEx);
-            setYEx(_yEx);
-            setX1Ex(_x1Ex);
-            setX2Ex(_x2Ex);
-            setY1Ex(_y1Ex);
-            setY2Ex(_y2Ex);
-            setQEx(_qEx);
-            setREx(_rEx);
-            setAEx(_aEx);
-            setNEx(_bEx);
-        }
-        // setResult(RandomPrime(Math.ceil(number * 10 / 3), 10).toString());
+        const result =CalInverse(a,n);
+        setResultD(result.d);
+        setResultX(result.x);
+        setResultY(result.y);
+        setResultInverse(result.inverse);
+        setXEx(result.xEx);
+        setYEx(result.yEx);
+        setX1Ex(result.x1Ex);
+        setX2Ex(result.x2Ex);
+        setY1Ex(result.y1Ex);
+        setY2Ex(result.y2Ex);
+        setQEx(result.qEx);
+        setREx(result.rEx);
+        setAEx(result.aEx);
+        setNEx(result.nEx);
     }
-
-
     return (
         <IonItem>
             <IonLabel position="stacked">A</IonLabel>
