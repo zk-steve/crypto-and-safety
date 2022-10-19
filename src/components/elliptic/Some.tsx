@@ -47,7 +47,23 @@ export const CalAddElliptic = (_xp: string, _yp: string, _xq: string, _yq: strin
     if (xr < 0) xr += BigInt(_p);
     let yr = (BigInt(lambda) * (xp - xr) - yp) % BigInt(_p);
     if (yr < 0) yr += BigInt(_p);
-    return {x:xr, y:yr, lambda}
+    return {x: xr, y: yr, lambda}
+}
+
+export const CalDoubleElliptic = (_xp: string, _yp: string, _a: string, _p: string) => {
+    const xp = BigInt(_xp);
+    const yp = BigInt(_yp);
+    const a = BigInt(_a);
+    const xp2 = CalModularExponentiation(xp.toString(), "2", _p).result;
+    const invr = CalInverse((BigInt(2) * yp).toString(), _p).inverse;
+    let lambda = ((BigInt(3) * BigInt(xp2) + a) * BigInt(invr)) % BigInt(_p);
+    if (lambda < 0) lambda += BigInt(_p);
+    const lam2 = CalModularExponentiation(lambda.toString(), "2", _p).result;
+    let xr = (BigInt(lam2) - BigInt(2) * xp) % BigInt(_p);
+    if (xr < 0) xr += BigInt(_p);
+    let yr = (BigInt(lambda) * (xp - xr) - yp) % BigInt(_p);
+    if (yr < 0) yr += BigInt(_p);
+    return {x: xr, y: yr, lambda}
 }
 
 const Some: React.FC = () => {
@@ -63,19 +79,26 @@ const Some: React.FC = () => {
         // let a = "5";
         // let b = "4";
         // let p = "127";
-        let a = "-1";
-        let b = "188";
-        let p = "751";
+        // let a = "-1";
+        // let b = "188";
+        // let p = "751";
+        let a = "2";
+        let b = "2";
+        let p = "17";
         const sqG = CalSquareGroup(p);
         const r = CalPoints(sqG, a, b, p);
-        const chosePoint = r[0];
-        const vv = [chosePoint];
-        let cur = chosePoint;
-        let i = 0;
-        while (true){
-            cur = CalAddElliptic(cur.x.toString(), cur.y.toString(), chosePoint.x.toString(), chosePoint.y.toString(), p)
+        const chosePoint = {x:"5", y: "1"};
+        let cur = CalDoubleElliptic(chosePoint.x.toString(), chosePoint.y.toString(), a, p);
+        const vv = [chosePoint, cur];
+        let i = 2;
+        let curX = BigInt(i).toString(2).length - 1;
+
+        while (true) {
+            // console.log(cur)
+            console.log(chosePoint, cur)
+            cur = CalAddElliptic(chosePoint.x.toString(), chosePoint.y.toString(), cur.x.toString(), cur.y.toString(), p)
             i++;
-            if (i > 20) break;
+            if (i > 50) break;
             // if (!sqG[cur.x.toString()]) break;
             vv.push(cur);
         }
@@ -87,7 +110,7 @@ const Some: React.FC = () => {
         // const sqG = CalSquareGroup("23");
         // const r = CalPoints(sqG, "1", "1", "23");
         // console.log(r);
-        // const t = CalAddElliptic("3", "10", "9", "7", "23");
+        // const t = CalAddElliptic("3", "10", "3", "10", "23");
         // console.log(t);
     }, [])
     return (
