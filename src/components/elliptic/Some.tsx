@@ -39,7 +39,8 @@ export const CalAddElliptic = (_xp: string, _yp: string, _xq: string, _yq: strin
     const yp = BigInt(_yp);
     const xq = BigInt(_xq);
     const yq = BigInt(_yq);
-    const invr = CalInverse((xq - xp).toString(), _p).inverse;
+    const p = BigInt(_p);
+    const invr = CalInverse((xq - xp + p).toString(), _p).inverse;
     let lambda = ((yq - yp) * BigInt(invr)) % BigInt(_p);
     if (lambda < 0) lambda += BigInt(_p);
     const lam2 = CalModularExponentiation(lambda.toString(), "2", _p).result;
@@ -65,6 +66,25 @@ export const CalDoubleElliptic = (_xp: string, _yp: string, _a: string, _p: stri
     if (yr < 0) yr += BigInt(_p);
     return {x: xr, y: yr, lambda}
 }
+export const CalMultiply = (_d: string, _xp: string, _yp: string, _a: string, _p: string) => {
+    const xp = BigInt(_xp);
+    const yp = BigInt(_yp);
+    const d = BigInt(_d);
+    const recur: any = ({x, y}: { x: bigint, y: bigint }, n: bigint) => {
+        if (n === BigInt(0)) {
+            return {x: BigInt(0), y: BigInt(0)}
+        }
+        if (n === BigInt(1)) {
+            return {x, y}
+        }
+        if (n % BigInt(2) === BigInt(1)) {
+            const p2: any = recur({x, y}, (n - BigInt(1)));
+            return CalAddElliptic(x.toString(), y.toString(), p2.x.toString(), p2.y.toString(), _p)
+        }
+        return recur(CalDoubleElliptic(x.toString(), y.toString(), _a, _p), n / BigInt(2))
+    }
+    return recur({x: xp, y: yp}, d)
+}
 
 const Some: React.FC = () => {
     const [p, setP] = useState<string>("");
@@ -79,39 +99,43 @@ const Some: React.FC = () => {
         // let a = "5";
         // let b = "4";
         // let p = "127";
-        // let a = "-1";
-        // let b = "188";
-        // let p = "751";
-        let a = "2";
-        let b = "2";
-        let p = "17";
+        let a = "-1";
+        let b = "188";
+        let p = "751";
+        // let a = "2";
+        // let b = "2";
+        // let p = "17";
+        // let a = "1";
+        // let b = "3";
+        // let p = "7";
+        // let a = "1";
+        // let b = "1";
+        // let p = "23";
         const sqG = CalSquareGroup(p);
-        const r = CalPoints(sqG, a, b, p);
-        const chosePoint = {x:"5", y: "1"};
+        const chosePoint = {x: "0", y: "376"};
+        // const chosePoint = sqG[0];
         let cur = CalDoubleElliptic(chosePoint.x.toString(), chosePoint.y.toString(), a, p);
         const vv = [chosePoint, cur];
-        let i = 2;
-        let curX = BigInt(i).toString(2).length - 1;
-
         while (true) {
             // console.log(cur)
-            console.log(chosePoint, cur)
             cur = CalAddElliptic(chosePoint.x.toString(), chosePoint.y.toString(), cur.x.toString(), cur.y.toString(), p)
-            i++;
-            if (i > 50) break;
-            // if (!sqG[cur.x.toString()]) break;
             vv.push(cur);
+            if (cur.x.toString() === chosePoint.x.toString()) break;
         }
-        // const rr = r.map((v => {
-        //     return {...v, "2p": CalAddElliptic(v.x.toString(), v.y.toString(), v.x.toString(), v.y.toString(), p)}
-        // }))
-        console.log(vv);
-
-        // const sqG = CalSquareGroup("23");
-        // const r = CalPoints(sqG, "1", "1", "23");
-        // console.log(r);
-        // const t = CalAddElliptic("3", "10", "3", "10", "23");
-        // console.log(t);
+        console.log(vv)
+        console.log(sqG)
+        const priv = 85;
+        const pb = CalMultiply(priv.toString(), chosePoint.x.toString(), chosePoint.y.toString(), a, p);
+        const ranA = 113;
+        const pc1 = CalMultiply(ranA.toString(), chosePoint.x.toString(), chosePoint.y.toString(), a, p);
+        const pc2KPb = CalMultiply(ranA.toString(), pb.x.toString(), pb.y.toString(), a, p);
+        const pm = {x: "443", y: "253"};
+        const pc2 = CalAddElliptic(pm.x.toString(), pm.y.toString(), pc2KPb.x.toString(), pc2KPb.y.toString(), p)
+        console.log([pb]);
+        console.log([pc1, pc2]);
+        const dPc1KPb = CalMultiply(priv.toString(), pc1.x.toString(), pc1.y.toString(), a, p);
+        const dPM = CalAddElliptic(pc2.x.toString(), pc2.y.toString(), dPc1KPb.x.toString(), (-dPc1KPb.y).toString(), p)
+        console.log([dPM]);
     }, [])
     return (
         <IonItem>
