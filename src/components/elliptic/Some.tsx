@@ -4,7 +4,7 @@ import {
     IonIcon, IonInput, IonItem, IonLabel,
     IonReorder, IonRow, IonTextarea
 } from '@ionic/react';
-import './rsa.css';
+import './Elliptic.css';
 import { useState } from "react";
 import { pizza } from "ionicons/icons";
 import { CalPrimitives } from '../primitive-cyclic/PrimitiveCyclic';
@@ -18,7 +18,7 @@ export const CalDRSA = (_p: string, _q: string, _e?: string) => {
     const d = CalInverse(_e, pi.toString()).inverse;
     return { pi: pi.toString(), e: _e, d: d, n: (p * q).toString() }
 }
-const RSACom: React.FC = () => {
+const Some: React.FC = () => {
     const [p, setP] = useState<string>("");
     const [q, setQ] = useState<string>("");
     const [result, setResult] = useState({ pi: "", e: "", d: "", n: "" });
@@ -69,5 +69,5 @@ const RSACom: React.FC = () => {
     );
 };
 
-export default RSACom;
+export default Some;
 

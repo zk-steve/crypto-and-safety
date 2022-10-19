@@ -4,7 +4,7 @@ import {
     IonIcon, IonInput, IonItem, IonLabel,
     IonReorder, IonRow, IonTextarea
 } from '@ionic/react';
-import './rsa.css';
+import './Elliptic.css';
 import {useState} from "react";
 import {pizza} from "ionicons/icons";
 import {CalPrimitives} from '../primitive-cyclic/PrimitiveCyclic';

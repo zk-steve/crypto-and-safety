@@ -23,6 +23,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import RSA from './pages/rsa/rsa';
+import Elliptic from './pages/elliptic/Elliptic';
 
 setupIonicReact();
 
@@ -38,6 +39,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/rsa" exact={true}>
               <RSA />
+            </Route>
+            <Route path="/elliptic" exact={true}>
+              <Elliptic />
             </Route>
             <Route path="/page/:name" exact={true}>
               <Page />

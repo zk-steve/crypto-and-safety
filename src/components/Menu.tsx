@@ -49,6 +49,12 @@ const appPages: AppPage[] = [
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp
   },
+  {
+    title: 'Elliptic Curve',
+    url: '/elliptic-curve',
+    iosIcon: paperPlaneOutline,
+    mdIcon: paperPlaneSharp
+  },
   // {
   //   title: 'Favorites',
   //   url: '/page/Favorites',
