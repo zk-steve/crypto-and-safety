@@ -86,7 +86,7 @@ export const DecryptRSA: React.FC = () => {
 
     const getNumber = () => {
         const x = CalModularExponentiation(y, d, n).result;
-        const _m = DecodeMessage(y);
+        const _m = DecodeMessage(x);
 
         setResult({m : _m, x})
     }

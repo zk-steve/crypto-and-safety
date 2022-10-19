@@ -14,7 +14,7 @@ export const CalDRSA = (_p: string, _q: string, _e?: string) => {
     const p = BigInt(_p);
     const q = BigInt(_q);
     const pi = (p - BigInt(1)) * (q - BigInt(1));
-    _e = _e ?? CalPrimitives(pi.toString(), (pi / BigInt(2)).toString(), (pi / BigInt(2) + BigInt(20000)).toString()).result[0]
+    _e = _e ?? CalPrimitives(pi.toString(), (pi / BigInt(3)).toString(), (pi / BigInt(3) + BigInt(20000)).toString()).result[0]
     const d = CalInverse(_e, pi.toString()).inverse;
     return { pi: pi.toString(), e: _e, d: d, n: (p * q).toString() }
 }
