@@ -40,7 +40,7 @@ const App: React.FC = () => {
             <Route path="/rsa" exact={true}>
               <RSA />
             </Route>
-            <Route path="/elliptic" exact={true}>
+            <Route path="/elliptic-curve" exact={true}>
               <Elliptic />
             </Route>
             <Route path="/page/:name" exact={true}>
