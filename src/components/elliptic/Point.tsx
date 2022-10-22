@@ -2,20 +2,27 @@ import {
     IonButton, IonCol,
     IonGrid,
     IonIcon, IonInput, IonItem, IonLabel,
-    IonReorder, IonRow, IonTextarea
+    IonReorder, IonRow, IonTextarea, IonTitle
 } from '@ionic/react';
 import './Elliptic.css';
 import {useEffect, useState} from "react";
-import {pizza} from "ionicons/icons";
+import {pizza, square} from "ionicons/icons";
 import {CalModularExponentiation} from "../modular-exponentiation/ModularExponentiation";
 import {CalInverse} from "../inverse/Inverse";
 
 export const CalSquareGroup = (_p: string) => {
     const p = BigInt(_p);
     let a: any = {};
+    let count = 0;
     for (let i = BigInt(1); i < p; i++) {
         const r = (CalModularExponentiation(i.toString(), "2", _p).result);
-        a[r] = [...(a[r] ?? []), i];
+        if (!a[r] && count < 1000) {
+            count ++;
+            a[r] = [];
+        }
+        if (a[r]){
+            a[r].push(i);
+        }
     }
     return a
 }
@@ -26,6 +33,7 @@ export const CalPoints = (q: any, _a: string, _b: string, _p: string) => {
     const p = BigInt(_p);
     const re = [];
     for (let i = BigInt(0); i < p; i++) {
+        if (re.length > 100) break;
         const x3 = (CalModularExponentiation(i.toString(), "3", _p).result);
         const r = (BigInt(x3) + i * a + b) % p;
         if (q[r.toString()]) re.push({x: i, y: q[r.toString()][0]}, {x: i, y: q[r.toString()][1]});
@@ -85,52 +93,31 @@ export const CalMultiply = (_d: string, _xp: string, _yp: string, _a: string, _p
     return recur({x: xp, y: yp}, d)
 }
 
-const Some: React.FC = () => {
+const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
+    const [a, setA] = useState<string>("");
+    const [b, setB] = useState<string>("");
     const [p, setP] = useState<string>("");
-    const [q, setQ] = useState<string>("");
-    const [result, setResult] = useState({pi: "", e: "", d: "", n: ""});
+    const [result, setResult] = useState<any>({square: {}, points: []});
     const [show, setShow] = useState<boolean>(false);
 
     const getNumber = () => {
+        const sqr = CalSquareGroup(p);
+        const points = CalPoints(sqr, a, b, p);
+        setResult({square: sqr, points});
     }
-
     useEffect(() => {
-        let a = "-1";
-        let b = "188";
-        let p = "751";
-        const sqG = CalSquareGroup(p);
-        const chosePoint = {x: "0", y: "376"};
-        // const chosePoint = sqG[0];
-        let cur = CalDoubleElliptic(chosePoint.x.toString(), chosePoint.y.toString(), a, p);
-        const vv = [chosePoint, cur];
-        while (true) {
-            // console.log(cur)
-            cur = CalAddElliptic(chosePoint.x.toString(), chosePoint.y.toString(), cur.x.toString(), cur.y.toString(), p)
-            vv.push(cur);
-            if (cur.x.toString() === chosePoint.x.toString()) break;
-        }
-        console.log(vv)
-        console.log(sqG)
-        const priv = 85;
-        const pb = CalMultiply(priv.toString(), chosePoint.x.toString(), chosePoint.y.toString(), a, p);
-        const ranA = 113;
-        const pc1 = CalMultiply(ranA.toString(), chosePoint.x.toString(), chosePoint.y.toString(), a, p);
-        const pc2KPb = CalMultiply(ranA.toString(), pb.x.toString(), pb.y.toString(), a, p);
-        const pm = {x: "443", y: "253"};
-        const pc2 = CalAddElliptic(pm.x.toString(), pm.y.toString(), pc2KPb.x.toString(), pc2KPb.y.toString(), p)
-        console.log([pb]);
-        console.log([pc1, pc2]);
-        const dPc1KPb = CalMultiply(priv.toString(), pc1.x.toString(), pc1.y.toString(), a, p);
-        const dPM = CalAddElliptic(pc2.x.toString(), pc2.y.toString(), dPc1KPb.x.toString(), (-dPc1KPb.y).toString(), p)
-        console.log([dPM]);
-    }, [])
+        if (props?.setParams) props.setParams({a, b, p, square: result.square});
+    }, [a, b, p]);
     return (
         <IonItem>
-            <IonLabel position="stacked">PPP</IonLabel>
-            <IonInput onIonChange={e => setP(e.detail.value!)} value={p}
+            <IonLabel position="stacked">a</IonLabel>
+            <IonInput onIonChange={e => setA(e.detail.value!)} value={a}
                       clearInput inputmode={"numeric"}> </IonInput>
-            <IonLabel position="stacked">Q</IonLabel>
-            <IonInput onIonChange={e => setQ(e.detail.value!)} value={q}
+            <IonLabel position="stacked">b</IonLabel>
+            <IonInput onIonChange={e => setB(e.detail.value!)} value={b}
+                      clearInput inputmode={"numeric"}> </IonInput>
+            <IonLabel position="stacked">p</IonLabel>
+            <IonInput onIonChange={e => setP(e.detail.value!)} value={p}
                       clearInput inputmode={"numeric"}> </IonInput>
             <div slot="end">
                 <IonButton onClick={getNumber} size="default">Xử lý</IonButton>
@@ -139,26 +126,41 @@ const Some: React.FC = () => {
                     setShow(!show)
                 }} size="default">{show ? 'Ẩn KQ' : 'Hiện KQ'}</IonButton>
             </div>
-            <IonGrid>
-                <IonRow>
-                    <IonCol size="12">
-                        <IonLabel position="stacked">Ф(n)=(p-1)(q-1)</IonLabel>
-                        <IonTextarea color="success" value={result.pi} readonly autoGrow></IonTextarea>
-                    </IonCol>
-                    <IonCol size="12">
-                        <IonLabel position="stacked">n</IonLabel>
-                        <IonTextarea color="success" value={result.n} readonly autoGrow></IonTextarea>
-                    </IonCol>
-                    <IonCol size="12">
-                        <IonLabel position="stacked">e</IonLabel>
-                        <IonTextarea color="success" value={result.e} readonly autoGrow></IonTextarea>
-                    </IonCol>
-                    <IonCol size="12">
-                        <IonLabel position="stacked">d</IonLabel>
-                        <IonTextarea color="success" value={result.d} readonly autoGrow></IonTextarea>
-                    </IonCol>
+            <IonTitle>Thặng dư bậc hai</IonTitle>
+            <IonGrid fixed className={"my-grid"} style={{display: show ? '' : 'none'}}>
+                {/*<IonRow align-items-end>*/}
+                {/*    <IonCol className={"my-col"} size="5">a</IonCol>*/}
+                {/*    <IonCol className={"my-col"} size="5">ai</IonCol>*/}
+                {/*    <IonCol className={"my-col"} size="5">x</IonCol>*/}
+                {/*    <IonCol className={"my-col"} size="5">power</IonCol>*/}
+                {/*</IonRow>*/}
+                <IonRow align-items-end>
+                    {Object.keys(result.square).map((x, i) => {
+                        if (i > 1000) return ;
+                        return (
+                            <IonCol className={"my-col"} size="2">
+                                <div>{x}</div>
+                            </IonCol>
+                        )
+                    })}
                 </IonRow>
             </IonGrid>
+            <IonTitle>Danh sách điểm vô cực</IonTitle>
+            <IonGrid fixed className={"my-grid"} style={{display: show ? '' : 'none'}}>
+                <IonRow align-items-end>
+                    {result.points.map((x: any, i: number) => {
+                        if (i > 1000) return ;
+                        return (
+                            <>
+                                <IonCol className={"my-col"} size="2">
+                                    <div>{x.x.toString()}, {x.y.toString()}</div>
+                                </IonCol>
+                            </>
+                        )
+                    })}
+                </IonRow>
+            </IonGrid>
+
             <IonReorder slot="end">
                 <IonIcon icon={pizza}/>
             </IonReorder>
@@ -166,5 +168,5 @@ const Some: React.FC = () => {
     );
 };
 
-export default Some;
+export default Point;
 

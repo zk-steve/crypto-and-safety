@@ -9,11 +9,11 @@ import {
   IonTitle,
   IonToolbar, ItemReorderEventDetail
 } from '@ionic/react';
-import {useParams} from 'react-router';
-import ExploreContainer from '../../components/ExploreContainer';
 import './Elliptic.css';
 import {useEffect, useMemo, useState} from "react";
 import Some from '../../components/elliptic/Some';
+import Point from "../../components/elliptic/Point";
+import EncryptElgamal from "../../components/elliptic/EncryptElgamal";
 const Elliptic: React.FC = () => {
   const doReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
       event.detail.complete();
@@ -47,7 +47,10 @@ const Elliptic: React.FC = () => {
               {/*    </IonToolbar>*/}
               {/*</IonHeader>*/}
               <IonReorderGroup disabled={false} onIonItemReorder={doReorder}>
-                  {components}
+                  {/*{components}*/}
+                    <Point></Point>
+                    <EncryptElgamal></EncryptElgamal>
+
               </IonReorderGroup>
               {/*<ExploreContainer name={name} />*/}
           </IonContent>
