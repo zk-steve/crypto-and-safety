@@ -33,7 +33,6 @@ export const CalPoints = (q: any, _a: string, _b: string, _p: string) => {
     const p = BigInt(_p);
     const re = [];
     for (let i = BigInt(0); i < p; i++) {
-        if (re.length > 100) break;
         const x3 = (CalModularExponentiation(i.toString(), "3", _p).result);
         const r = (BigInt(x3) + i * a + b) % p;
         if (q[r.toString()]) re.push({x: i, y: q[r.toString()][0]}, {x: i, y: q[r.toString()][1]});
@@ -110,6 +109,7 @@ const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
     }, [a, b, p]);
     return (
         <IonItem>
+            <IonTitle>Tính bảng thặng dư bậc 2 và danh sách điểm vô cực: y<sup>2</sup> = x<sup>3</sup> + ax + b (mod p)</IonTitle>
             <IonLabel position="stacked">a</IonLabel>
             <IonInput onIonChange={e => setA(e.detail.value!)} value={a}
                       clearInput inputmode={"numeric"}> </IonInput>
@@ -126,7 +126,7 @@ const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
                     setShow(!show)
                 }} size="default">{show ? 'Ẩn KQ' : 'Hiện KQ'}</IonButton>
             </div>
-            <IonTitle>Thặng dư bậc hai</IonTitle>
+            <IonTitle style={{display: show ? '' : 'none'}}>Thặng dư bậc hai</IonTitle>
             <IonGrid fixed className={"my-grid"} style={{display: show ? '' : 'none'}}>
                 {/*<IonRow align-items-end>*/}
                 {/*    <IonCol className={"my-col"} size="5">a</IonCol>*/}
@@ -145,7 +145,7 @@ const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
                     })}
                 </IonRow>
             </IonGrid>
-            <IonTitle>Danh sách điểm vô cực</IonTitle>
+            <IonTitle style={{display: show ? '' : 'none'}}>Danh sách điểm vô cực</IonTitle>
             <IonGrid fixed className={"my-grid"} style={{display: show ? '' : 'none'}}>
                 <IonRow align-items-end>
                     {result.points.map((x: any, i: number) => {

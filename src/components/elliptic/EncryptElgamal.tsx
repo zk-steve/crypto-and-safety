@@ -2,7 +2,7 @@ import {
     IonButton, IonCol,
     IonGrid,
     IonIcon, IonInput, IonItem, IonLabel,
-    IonReorder, IonRow, IonTextarea
+    IonReorder, IonRow, IonTextarea, IonTitle
 } from '@ionic/react';
 import './Elliptic.css';
 import {useEffect, useState} from "react";
@@ -72,7 +72,7 @@ const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) 
     const [pY, setPY] = useState<string>("");
     const [ranA, setRanA] = useState<string>("");
     const [priv, setPriv] = useState<string>("");
-    const [result, setResult] = useState<any>({pb: {}, pc1: {}, pc2: {},dPc1KPb: {}, dPM: {}});
+    const [result, setResult] = useState<any>({pb: {}, pc1: {}, pc2: {}, dPc1KPb: {}, dPM: {}});
     const [show, setShow] = useState<boolean>(false);
     useEffect(() => {
         if (props.p) setP(props.p)
@@ -113,6 +113,8 @@ const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) 
     }, [])
     return (
         <IonItem>
+            <IonTitle>Mã hoá và giải mã (Alice cần gửi tin nhắn cho Bob)</IonTitle>
+            <IonTitle>Đường cong Elliptic y<sup>2</sup> = x<sup>3</sup> + ax + b (mod p)</IonTitle>
             <IonLabel position="stacked">a</IonLabel>
             <IonInput onIonChange={e => setA(e.detail.value!)} value={a}
                       clearInput inputmode={"numeric"}> </IonInput>
@@ -122,22 +124,26 @@ const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) 
             <IonLabel position="stacked">p</IonLabel>
             <IonInput onIonChange={e => setP(e.detail.value!)} value={p}
                       clearInput inputmode={"numeric"}> </IonInput>
+            <IonTitle>Khoá riêng của Bob</IonTitle>
+            <IonLabel position="stacked">s</IonLabel>
+            <IonInput onIonChange={e => setPriv(e.detail.value!)} value={priv}
+                      clearInput inputmode={"numeric"}> </IonInput>
+            <IonTitle>Toạ độ của điểm P trên đường cong Elliptic </IonTitle>
             <IonLabel position="stacked">x</IonLabel>
             <IonInput onIonChange={e => setX(e.detail.value!)} value={x}
                       clearInput inputmode={"numeric"}> </IonInput>
             <IonLabel position="stacked">y</IonLabel>
             <IonInput onIonChange={e => setY(e.detail.value!)} value={y}
                       clearInput inputmode={"numeric"}> </IonInput>
-            <IonLabel position="stacked">Priv Numb</IonLabel>
-            <IonInput onIonChange={e => setPriv(e.detail.value!)} value={priv}
-                      clearInput inputmode={"numeric"}> </IonInput>
-            <IonLabel position="stacked">RanA</IonLabel>
+            <IonTitle>Số nguyên ngẫu nhiên k của Alice</IonTitle>
+            <IonLabel position="stacked">k</IonLabel>
             <IonInput onIonChange={e => setRanA(e.detail.value!)} value={ranA}
                       clearInput inputmode={"numeric"}> </IonInput>
-            <IonLabel position="stacked">Plain Text X</IonLabel>
+            <IonTitle>Toạ độ của bản tin cần mã hoá</IonTitle>
+            <IonLabel position="stacked">x</IonLabel>
             <IonInput onIonChange={e => setPX(e.detail.value!)} value={pX}
                       clearInput inputmode={"numeric"}> </IonInput>
-            <IonLabel position="stacked">Plain Text Y</IonLabel>
+            <IonLabel position="stacked">y</IonLabel>
             <IonInput onIonChange={e => setPY(e.detail.value!)} value={pY}
                       clearInput inputmode={"numeric"}> </IonInput>
             <div slot="end">
@@ -147,19 +153,24 @@ const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) 
                     setShow(!show)
                 }} size="default">{show ? 'Ẩn KQ' : 'Hiện KQ'}</IonButton>
             </div>
-            <IonGrid>
+            <IonTitle style={{display: show ? '' : 'none'}}>Kết quả:</IonTitle>
+            <IonGrid style={{display: show ? '' : 'none'}}>
                 <IonRow>
                     <IonCol size="12">
-                        <IonLabel position="stacked">PB</IonLabel>
-                        <IonTextarea color="success" value={`${result.pb.x}, ${result.pb.y}`} readonly autoGrow></IonTextarea>
+                        <IonLabel position="stacked">Publickey của Bob</IonLabel>
+                        <IonTextarea color="success" value={`${result.pb.x}, ${result.pb.y}`} readonly
+                                     autoGrow></IonTextarea>
                     </IonCol>
                     <IonCol size="12">
-                        <IonLabel position="stacked">PC</IonLabel>
-                        <IonTextarea color="success" value={`[(${result.pc1.x}, ${result.pc1.y}), (${result.pc2.x}, ${result.pc2.y})]`} readonly autoGrow></IonTextarea>
+                        <IonLabel position="stacked">Bản mã</IonLabel>
+                        <IonTextarea color="success"
+                                     value={`[(${result.pc1.x}, ${result.pc1.y}), (${result.pc2.x}, ${result.pc2.y})]`}
+                                     readonly autoGrow></IonTextarea>
                     </IonCol>
                     <IonCol size="12">
-                        <IonLabel position="stacked">Decrypted Message</IonLabel>
-                        <IonTextarea color="success" value={`(${result.dPM.x}, ${result.dPM.y})`} readonly autoGrow></IonTextarea>
+                        <IonLabel position="stacked">Bản rõ được giải từ bản mã</IonLabel>
+                        <IonTextarea color="success" value={`(${result.dPM.x}, ${result.dPM.y})`} readonly
+                                     autoGrow></IonTextarea>
                     </IonCol>
                 </IonRow>
             </IonGrid>
@@ -170,5 +181,5 @@ const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) 
     );
 };
 
-export default EncryptElgamal ;
+export default EncryptElgamal;
 
