@@ -9,6 +9,7 @@ import {useEffect, useState} from "react";
 import {pizza} from "ionicons/icons";
 import {CalModularExponentiation} from "../modular-exponentiation/ModularExponentiation";
 import {CalInverse} from "../inverse/Inverse";
+import {CalPoints} from "./Point";
 
 export const CalAddElliptic = (_xp: string, _yp: string, _xq: string, _yq: string, _p: string) => {
     const xp = BigInt(_xp);
@@ -60,6 +61,22 @@ export const CalMultiply = (_d: string, _xp: string, _yp: string, _a: string, _p
         return recur(CalDoubleElliptic(x.toString(), y.toString(), _a, _p), n / BigInt(2))
     }
     return recur({x: xp, y: yp}, d)
+}
+
+
+export const FindB = (sqr: any, a: string, p: number) => {
+    for (let i = 2; i <= p; i++) {
+        const x = CalPoints(sqr, a, i.toString(), p.toString());
+        if (IsPrime(x.length + 1)) return {i, total: x.length + 1, a, p};
+    }
+}
+
+
+export const IsPrime = (t: number) => {
+    for (let i = 2; i < t; i++) {
+        if (t % i === 0) return false;
+    }
+    return true;
 }
 
 const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) => any }) => {

@@ -20,19 +20,6 @@ export const CalSquareGroup = (_p: string) => {
     return a
 }
 
-export const CalPoints = (q: any, _a: string, _b: string, _p: string) => {
-    const a = BigInt(_a);
-    const b = BigInt(_b);
-    const p = BigInt(_p);
-    const re = [];
-    for (let i = BigInt(0); i < p; i++) {
-        const x3 = (CalModularExponentiation(i.toString(), "3", _p).result);
-        const r = (BigInt(x3) + i * a + b) % p;
-        if (q[r.toString()]) re.push({x: i, y: q[r.toString()][0]}, {x: i, y: q[r.toString()][1]});
-    }
-    return re
-}
-
 export const CalAddElliptic = (_xp: string, _yp: string, _xq: string, _yq: string, _p: string) => {
     const xp = BigInt(_xp);
     const yp = BigInt(_yp);

@@ -72,25 +72,6 @@ export const CalDoubleElliptic = (_xp: string, _yp: string, _a: string, _p: stri
     if (yr < 0) yr += BigInt(_p);
     return {x: xr, y: yr, lambda}
 }
-export const CalMultiply = (_d: string, _xp: string, _yp: string, _a: string, _p: string) => {
-    const xp = BigInt(_xp);
-    const yp = BigInt(_yp);
-    const d = BigInt(_d);
-    const recur: any = ({x, y}: { x: bigint, y: bigint }, n: bigint) => {
-        if (n === BigInt(0)) {
-            return {x: BigInt(0), y: BigInt(0)}
-        }
-        if (n === BigInt(1)) {
-            return {x, y}
-        }
-        if (n % BigInt(2) === BigInt(1)) {
-            const p2: any = recur({x, y}, (n - BigInt(1)));
-            return CalAddElliptic(x.toString(), y.toString(), p2.x.toString(), p2.y.toString(), _p)
-        }
-        return recur(CalDoubleElliptic(x.toString(), y.toString(), _a, _p), n / BigInt(2))
-    }
-    return recur({x: xp, y: yp}, d)
-}
 
 const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
     const [a, setA] = useState<string>("");
