@@ -90,7 +90,7 @@ const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
     }, [a, b, p]);
     return (
         <IonItem>
-            <IonTitle>Tính bảng thặng dư bậc 2 và danh sách điểm vô cực: y<sup>2</sup> = x<sup>3</sup> + ax + b (mod p)</IonTitle>
+            <h3>Tính bảng thặng dư bậc 2 và danh sách điểm vô cực: y<sup>2</sup> = x<sup>3</sup> + ax + b (mod p)</h3>
             <IonLabel position="stacked">a</IonLabel>
             <IonInput onIonChange={e => setA(e.detail.value!)} value={a}
                       clearInput inputmode={"numeric"}> </IonInput>
@@ -107,7 +107,7 @@ const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
                     setShow(!show)
                 }} size="default">{show ? 'Ẩn KQ' : 'Hiện KQ'}</IonButton>
             </div>
-            <IonTitle style={{display: show ? '' : 'none'}}>Thặng dư bậc hai</IonTitle>
+            <h3 style={{display: show ? '' : 'none'}}>Thặng dư bậc hai</h3>
             <IonGrid fixed className={"my-grid"} style={{display: show ? '' : 'none'}}>
                 {/*<IonRow align-items-end>*/}
                 {/*    <IonCol className={"my-col"} size="5">a</IonCol>*/}
@@ -126,7 +126,7 @@ const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
                     })}
                 </IonRow>
             </IonGrid>
-            <IonTitle style={{display: show ? '' : 'none'}}>Danh sách điểm vô cực</IonTitle>
+            <h3 style={{display: show ? '' : 'none'}}>Danh sách điểm vô cực</h3>
             <IonGrid fixed className={"my-grid"} style={{display: show ? '' : 'none'}}>
                 <IonRow align-items-end>
                     {result.points.map((x: any, i: number) => {

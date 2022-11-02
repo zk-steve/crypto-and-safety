@@ -9,7 +9,7 @@ import {useEffect, useState} from "react";
 import {pizza} from "ionicons/icons";
 import {CalModularExponentiation} from "../modular-exponentiation/ModularExponentiation";
 import {CalInverse} from "../inverse/Inverse";
-import {CalPoints} from "./Point";
+import {CalPoints, CalSquareGroup} from "./Point";
 
 export const CalAddElliptic = (_xp: string, _yp: string, _xq: string, _yq: string, _p: string) => {
     const xp = BigInt(_xp);
@@ -79,6 +79,42 @@ export const IsPrime = (t: number) => {
     return true;
 }
 
+const SigAndEncryptElgammal = () => {
+    let pA = BigInt(467);
+        let alpha = BigInt(2);
+        let secretA = BigInt(127);
+        let beta = CalModularExponentiation(alpha.toString(),secretA.toString(),pA.toString()).result;
+        let k = 213;
+        let x = BigInt(100);
+        let pA_1 = pA-BigInt(1);
+        let kInverse = CalInverse(k.toString(), pA_1.toString()).inverse;
+        let gammal = CalModularExponentiation(alpha.toString(),k.toString(),pA.toString()).result;
+        let sigma =  ((x - secretA *  BigInt(gammal)) * BigInt(kInverse)) % pA_1;
+        if (sigma < BigInt(0)) sigma += pA_1;
+        const signature = {gammal, sigma}
+        console.log({beta, kInverse, signature})
+        const beta_gammal  = CalModularExponentiation(beta.toString(),gammal.toString(),pA.toString()).result;
+        const gammal_sigma  = CalModularExponentiation(gammal.toString(),sigma.toString(),pA.toString()).result;
+        let left = (BigInt(beta_gammal) * BigInt(gammal_sigma)) % pA;
+        if (left < BigInt(0)) left += pA;
+        let right =  CalModularExponentiation(alpha.toString(),x.toString(),pA.toString()).result;
+        console.log({left,right});
+        const y1 = CalModularExponentiation(alpha.toString(),k.toString(),pA.toString()).result;
+        const _y2 = CalModularExponentiation(beta.toString(),k.toString(),pA.toString()).result;
+        const y2 = (x* BigInt(_y2)) % pA;
+        const encrypt = {y1, y2};
+        console.log({encrypt});
+        const y1_a = CalModularExponentiation(y1.toString(),secretA.toString(),pA.toString()).result;
+        const i_y1_a = CalInverse(y1_a.toString(), pA.toString()).inverse;
+        let decrypt = (BigInt(i_y1_a) * y2) % pA;
+        if (decrypt < BigInt(0)) decrypt += pA;
+        console.log({decrypt});
+}
+
+const SigAndEncryptECDSA = () => {
+
+}
+
 const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) => any }) => {
     const [a, setA] = useState<string>("");
     const [b, setB] = useState<string>("");
@@ -106,32 +142,33 @@ const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) 
     }
 
     useEffect(() => {
-        // let a = "-1";
-        // let b = "188";
-        // let p = "751";
-        // const chosePoint = {x: "0", y: "376"};
-        // // const chosePoint = sqG[0];
-        // let cur = CalDoubleElliptic(chosePoint.x.toString(), chosePoint.y.toString(), a, p);
-        // const vv = [chosePoint, cur];
-        // while (true) {
-        //     // console.log(cur)
-        //     cur = CalAddElliptic(chosePoint.x.toString(), chosePoint.y.toString(), cur.x.toString(), cur.y.toString(), p)
-        //     vv.push(cur);
-        //     if (cur.x.toString() === chosePoint.x.toString()) break;
-        // }
-        // console.log(vv)
-
-        // console.log([pb]);
-        // console.log([pc1, pc2]);
-        //
-        // const dPc1KPb = CalMultiply(priv.toString(), pc1.x.toString(), pc1.y.toString(), a, p);
-        // const dPM = CalAddElliptic(pc2.x.toString(), pc2.y.toString(), dPc1KPb.x.toString(), (-dPc1KPb.y).toString(), p)
-        // console.log([dPM]);
+        // let xp = "18"
+        // let yp = "199"
+        // let d = "7";
+        // let a = "2";
+        // let b = "2";
+        // let p = "8291"
+        let xp = "5"
+        let yp = "1"
+        let d = "7";
+        let a = "2";
+        let b = "2";
+        let p = "17"
+        let B = CalMultiply(d,xp,yp,a,p);
+        let hX = "26";
+        let key = "10";
+        let R = CalMultiply(key,xp,yp,a,p);
+        let r = R.x;
+        let i_Key = CalInverse(key,p);
+        let s = ((BigInt(hX) + BigInt(r) * BigInt(d)) * BigInt(i_Key.inverse)) % BigInt(p);
+        console.log({s});
+        
+                // SigAndEncryptECDSA();
     }, [])
     return (
         <IonItem>
-            <IonTitle>Mã hoá và giải mã (Alice cần gửi tin nhắn cho Bob)</IonTitle>
-            <IonTitle>Đường cong Elliptic y<sup>2</sup> = x<sup>3</sup> + ax + b (mod p)</IonTitle>
+            <h3>Mã hoá và giải mã (Alice cần gửi tin nhắn cho Bob)</h3>
+            <h3>Đường cong Elliptic y<sup>2</sup> = x<sup>3</sup> + ax + b (mod p)</h3>
             <IonLabel position="stacked">a</IonLabel>
             <IonInput onIonChange={e => setA(e.detail.value!)} value={a}
                       clearInput inputmode={"numeric"}> </IonInput>
@@ -141,22 +178,22 @@ const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) 
             <IonLabel position="stacked">p</IonLabel>
             <IonInput onIonChange={e => setP(e.detail.value!)} value={p}
                       clearInput inputmode={"numeric"}> </IonInput>
-            <IonTitle>Khoá riêng của Bob</IonTitle>
+            <h3>Khoá riêng của Bob</h3>
             <IonLabel position="stacked">s</IonLabel>
             <IonInput onIonChange={e => setPriv(e.detail.value!)} value={priv}
                       clearInput inputmode={"numeric"}> </IonInput>
-            <IonTitle>Toạ độ của điểm P trên đường cong Elliptic </IonTitle>
+            <h3>Toạ độ của điểm P trên đường cong Elliptic </h3>
             <IonLabel position="stacked">x</IonLabel>
             <IonInput onIonChange={e => setX(e.detail.value!)} value={x}
                       clearInput inputmode={"numeric"}> </IonInput>
             <IonLabel position="stacked">y</IonLabel>
             <IonInput onIonChange={e => setY(e.detail.value!)} value={y}
                       clearInput inputmode={"numeric"}> </IonInput>
-            <IonTitle>Số nguyên ngẫu nhiên k của Alice</IonTitle>
+            <h3>Số nguyên ngẫu nhiên k của Alice</h3>
             <IonLabel position="stacked">k</IonLabel>
             <IonInput onIonChange={e => setRanA(e.detail.value!)} value={ranA}
                       clearInput inputmode={"numeric"}> </IonInput>
-            <IonTitle>Toạ độ của bản tin cần mã hoá</IonTitle>
+            <h3>Toạ độ của bản tin cần mã hoá</h3>
             <IonLabel position="stacked">x</IonLabel>
             <IonInput onIonChange={e => setPX(e.detail.value!)} value={pX}
                       clearInput inputmode={"numeric"}> </IonInput>
@@ -170,7 +207,7 @@ const EncryptElgamal: React.FC = (props: { p?: string, setParams?: (input: any) 
                     setShow(!show)
                 }} size="default">{show ? 'Ẩn KQ' : 'Hiện KQ'}</IonButton>
             </div>
-            <IonTitle style={{display: show ? '' : 'none'}}>Kết quả:</IonTitle>
+            <h3 style={{display: show ? '' : 'none'}}>Kết quả:</h3>
             <IonGrid style={{display: show ? '' : 'none'}}>
                 <IonRow>
                     <IonCol size="12">
