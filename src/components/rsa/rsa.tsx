@@ -14,6 +14,7 @@ export const CalDRSA = (_p: string, _q: string, _e?: string) => {
     const p = BigInt(_p);
     const q = BigInt(_q);
     const pi = (p - BigInt(1)) * (q - BigInt(1));
+    _e = _e == "" ? undefined : _e;
     _e = _e ?? CalPrimitives(pi.toString(), (pi / BigInt(3)).toString(), (pi / BigInt(3) + BigInt(20000)).toString()).result[0]
     const d = CalInverse(_e, pi.toString()).inverse;
     return { pi: pi.toString(), e: _e, d: d, n: (p * q).toString() }
@@ -21,11 +22,12 @@ export const CalDRSA = (_p: string, _q: string, _e?: string) => {
 const RSACom: React.FC = () => {
     const [p, setP] = useState<string>("");
     const [q, setQ] = useState<string>("");
+    const [e, setE] = useState<string>("");
     const [result, setResult] = useState({ pi: "", e: "", d: "", n: "" });
     const [show, setShow] = useState<boolean>(false);
 
     const getNumber = () => {
-        setResult(CalDRSA(p, q))
+        setResult(CalDRSA(p, q, e))
     }
     return (
         <IonItem>
@@ -34,6 +36,9 @@ const RSACom: React.FC = () => {
                 clearInput inputmode={"numeric"}> </IonInput>
             <IonLabel position="stacked">Q</IonLabel>
             <IonInput onIonChange={e => setQ(e.detail.value!)} value={q}
+                clearInput inputmode={"numeric"}> </IonInput>
+            <IonLabel position="stacked">E</IonLabel>
+            <IonInput onIonChange={e => setE(e.detail.value!)} value={e}
                 clearInput inputmode={"numeric"}> </IonInput>
             <div slot="end">
                 <IonButton onClick={getNumber} size="default">Xử lý</IonButton>

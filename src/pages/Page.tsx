@@ -3,9 +3,11 @@ import {
     IonButtons,
     IonContent,
     IonHeader,
+    IonItem,
     IonMenuButton,
     IonPage,
     IonReorderGroup,
+    IonTextarea,
     IonTitle,
     IonToolbar, ItemReorderEventDetail
 } from '@ionic/react';
@@ -19,6 +21,7 @@ import EuclideanExtended from "../components/euclidean-extended/EuclideanExtende
 import {PrimeFactorsTo} from "../components/CalPrimeTable";
 import ModularExponentiation from "../components/modular-exponentiation/ModularExponentiation";
 import PrimitiveCyclic from "../components/primitive-cyclic/PrimitiveCyclic";
+import primeData from './prime.json';
 
 
 const Page: React.FC = () => {
@@ -41,6 +44,11 @@ const Page: React.FC = () => {
                     <IonButton onClick={() => {
                         setComponents([...components, (<PrimeNumber></PrimeNumber>)])
                     }} slot="end" size="default">Số nguyên tố</IonButton>
+                    <IonButton onClick={() => {
+                        setComponents([...components, (<IonItem>
+                            <IonTextarea color="success" value={JSON.stringify(primeData)} readonly autoGrow></IonTextarea>
+                        </IonItem>)])
+                    }} slot="end" size="default">Bảng số nguyên tố</IonButton>
                     <IonButton onClick={() => {
                         setComponents([...components, (<Inverse></Inverse>)])
                     }} slot="end" size="default">Nghịch đảo</IonButton>

@@ -8,12 +8,23 @@ import './PrimitiveCyclic.css';
 import {useState} from "react";
 import {pizza} from "ionicons/icons";
 import {CalEuclideanExtended} from "../euclidean-extended/EuclideanExtended";
+import { CalModularExponentiation } from '../modular-exponentiation/ModularExponentiation';
 
 export const CalPrimitives = (p: string, start: string, end: string): { result: string[] } => {
     const result : string[]= [];
-    for (let i = BigInt(start); i <= BigInt(end); i++){
+    for (let i = BigInt(start); i <= BigInt(p); i++){
         const {d} = CalEuclideanExtended(i.toString(), p);
-        if (d === '1') result.push(i.toString());
+        if (d === '1') {
+            let t = {} as any;
+            for (let j = BigInt(1); j <= BigInt(p); j++){
+                t[CalModularExponentiation(i.toString(),j.toString(), p).result] = true;
+            }
+            console.log(t);
+            if (BigInt(Object.keys(t).length) == BigInt(p)-BigInt(1)){ 
+                result.push(i.toString());
+                return {result};
+            }
+        };
     }
     return {result};
 }

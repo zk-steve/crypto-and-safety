@@ -3,9 +3,11 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonItem,
   IonMenuButton,
   IonPage,
   IonReorderGroup,
+  IonTextarea,
   IonTitle,
   IonToolbar, ItemReorderEventDetail
 } from '@ionic/react';
@@ -21,7 +23,6 @@ import ModularExponentiation from "../../components/modular-exponentiation/Modul
 import PrimitiveCyclic from "../../components/primitive-cyclic/PrimitiveCyclic";
 import RSACom from '../../components/rsa/rsa';
 import {DecryptRSA, EncryptRSA} from '../../components/rsa/EncryptRSA';
-
 
 const RSA: React.FC = () => {
   const doReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
@@ -40,6 +41,7 @@ const RSA: React.FC = () => {
                       <IonMenuButton/>
                   </IonButtons>
                   <IonTitle>RSA</IonTitle>
+                  
                   <IonButton onClick={() => {
                         setComponents([...components, (<RSACom></RSACom>)])
                     }} slot="end" size="default">Tính d</IonButton>

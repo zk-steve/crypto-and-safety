@@ -1,0 +1,15 @@
+version: "3"
+services:
+  tunnel:
+    image: kroniak/ssh-client
+    restart: "always"
+    command:
+      - /bin/bash
+      - -c
+      - |
+        ssh -oStrictHostKeyChecking=no -p 22222 -R crypto:80:10.10.10.10:3000 10.10.10.11 auto-close=true
+  crypto:
+    restart: "always"
+    build:
+      context: .
+      dockerfile: Dockerfile

@@ -64,21 +64,6 @@ export const CalMultiply = (_d: string, _xp: string, _yp: string, _a: string, _p
 }
 
 
-export const FindB = (sqr: any, a: string, p: number) => {
-    for (let i = 2; i <= p; i++) {
-        const x = CalPoints(sqr, a, i.toString(), p.toString());
-        if (IsPrime(x.length + 1)) return {i, total: x.length + 1, a, p};
-    }
-}
-
-
-export const IsPrime = (t: number) => {
-    for (let i = 2; i < t; i++) {
-        if (t % i === 0) return false;
-    }
-    return true;
-}
-
 const SigAndEncryptElgammal = () => {
     let pA = BigInt(467);
         let alpha = BigInt(2);

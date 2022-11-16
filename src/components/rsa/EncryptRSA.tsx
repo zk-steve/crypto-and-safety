@@ -7,8 +7,6 @@ import {
 import './rsa.css';
 import {useState} from "react";
 import {pizza} from "ionicons/icons";
-import {CalPrimitives} from '../primitive-cyclic/PrimitiveCyclic';
-import {CalInverse} from '../inverse/Inverse';
 import {CalModularExponentiation} from "../modular-exponentiation/ModularExponentiation";
 
 export const EncodeMessage = (m: string): string => {
@@ -66,7 +64,7 @@ export const EncryptRSA: React.FC = () => {
                         <IonTextarea color="success" value={result.m} readonly autoGrow></IonTextarea>
                     </IonCol>
                     <IonCol size="12">
-                        <IonLabel position="stacked">Bản mã</IonLabel>
+                        <IonLabel position="stacked">Bản mã m<sup>e</sup> mod(n)</IonLabel>
                         <IonTextarea color="success" value={result.y} readonly autoGrow></IonTextarea>
                     </IonCol>
                 </IonRow>
@@ -111,7 +109,7 @@ export const DecryptRSA: React.FC = () => {
             <IonGrid>
                 <IonRow>
                     <IonCol size="12">
-                        <IonLabel position="stacked">Bản rõ dạng số</IonLabel>
+                        <IonLabel position="stacked">Bản rõ dạng số y<sup>d</sup>mod n</IonLabel>
                         <IonTextarea color="success" value={result.x} readonly autoGrow></IonTextarea>
                     </IonCol>
                     <IonCol size="12">
