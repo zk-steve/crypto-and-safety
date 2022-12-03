@@ -16,13 +16,10 @@ export const CalSquareGroup = (_p: string) => {
     let count = 0;
     for (let i = BigInt(1); i < p; i++) {
         const r = (CalModularExponentiation(i.toString(), "2", _p).result);
-        if (!a[r] && count < 1000) {
-            count ++;
+        if (!a[r]) {
             a[r] = [];
         }
-        if (a[r]){
-            a[r].push(i);
-        }
+        a[r].push(i);
     }
     return a
 }
@@ -49,6 +46,7 @@ export const CalAddElliptic = (_xp: string, _yp: string, _xq: string, _yq: strin
     const invr = CalInverse((xq - xp + p).toString(), _p).inverse;
     let lambda = ((yq - yp) * BigInt(invr)) % BigInt(_p);
     if (lambda < 0) lambda += BigInt(_p);
+    if (lambda == BigInt(0)) return {x: "0", y: "0", lambda}
     const lam2 = CalModularExponentiation(lambda.toString(), "2", _p).result;
     let xr = (BigInt(lam2) - xp - xq) % BigInt(_p);
     if (xr < 0) xr += BigInt(_p);
@@ -65,6 +63,7 @@ export const CalDoubleElliptic = (_xp: string, _yp: string, _a: string, _p: stri
     const invr = CalInverse((BigInt(2) * yp).toString(), _p).inverse;
     let lambda = ((BigInt(3) * BigInt(xp2) + a) * BigInt(invr)) % BigInt(_p);
     if (lambda < 0) lambda += BigInt(_p);
+    if (lambda == BigInt(0)) return {x: BigInt(0), y: BigInt(0), lambda}
     const lam2 = CalModularExponentiation(lambda.toString(), "2", _p).result;
     let xr = (BigInt(lam2) - BigInt(2) * xp) % BigInt(_p);
     if (xr < 0) xr += BigInt(_p);
@@ -117,7 +116,7 @@ const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
                 {/*</IonRow>*/}
                 <IonRow align-items-end>
                     {Object.keys(result.square).map((x, i) => {
-                        if (i > 1000) return ;
+                        // if (i > 1000) return ;
                         return (
                             <IonCol className={"my-col"} size="2">
                                 <div>{x}</div>
@@ -130,7 +129,7 @@ const Point: React.FC = (props: { setParams?: (input: any) => any }) => {
             <IonGrid fixed className={"my-grid"} style={{display: show ? '' : 'none'}}>
                 <IonRow align-items-end>
                     {result.points.map((x: any, i: number) => {
-                        if (i > 1000) return ;
+                        // if (i > 1000) return ;
                         return (
                             <>
                                 <IonCol className={"my-col"} size="2">
