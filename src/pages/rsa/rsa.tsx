@@ -130,12 +130,12 @@ const RSA: React.FC = () => {
                         <h3 style={{display: result.hashFile ? '' : 'none'}}>Mã băm của File</h3>
                         <IonTextarea style={{display: result.hashFile ? '' : 'none'}} color="success"
                                      value={result.hashFile} readonly autoGrow></IonTextarea>
+                        <IonButton onClick={step2}  style={{display: result.hashFile ? '' : 'none'}}
+                                   size="default">{isLoading.loadFile ? "Đang đọc file" : "Xử lý"}</IonButton>
                         <h3 style={{display: result.signature ? '' : 'none'}}>Chữ ký Y = M<sup>D</sup> mod N</h3>
                         <IonTextarea style={{display: result.signature ? '' : 'none'}} color="success"
                                      value={result.signature} readonly autoGrow></IonTextarea>
-                        <IonButton onClick={step2} slot="end"
-                                   size="default">{isLoading.loadFile ? "Đang đọc file" : "Xử lý"}</IonButton>
-                    </IonItem>) : (<></>)}
+                                           </IonItem>) : (<></>)}
                     <IonItem>
                         <h2>B1: Sinh khoá</h2>
                         <IonLabel position="stacked">Số bit của P</IonLabel>
