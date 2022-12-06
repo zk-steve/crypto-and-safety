@@ -1,13 +1,7 @@
 import {
     IonButton,
-    IonContent,
-    IonHeader,
-    IonIcon, IonInput, IonItem, IonItemDivider, IonLabel,
-    IonList,
-    IonMenuButton,
-    IonPage, IonReorder, IonReorderGroup, IonText, IonTextarea,
-    IonTitle,
-    IonToolbar, ItemReorderEventDetail
+    IonIcon, IonInput, IonItem, IonLabel,
+    IonReorder, IonTextarea
 } from '@ionic/react';
 import './PrimeNumber.css';
 import {useState} from "react";

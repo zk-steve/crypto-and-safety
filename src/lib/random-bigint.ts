@@ -12,7 +12,7 @@
  * at least 8 (>= 8 ).
  * @return
  */
-export function randomBigIntBits(bitlength: number): bigint {
+export function RandomBigIntBits(bitlength: number): bigint {
     // Check the bit-length
     if (bitlength >= 8) {
         // Find the largest integer possible from the bit-length
@@ -119,7 +119,7 @@ export function randomBigIntRange(min: bigint, max: bigint): bigint {
             // Create a loop to generate the random integer by bit-length
             // until it finds one within the correct range
             // Get a random integer at that bit-length
-            random = randomBigIntBits(randBits);
+            random = RandomBigIntBits(randBits);
 
             // Ensure it is within the proper range
             if (random < max && random > min) {

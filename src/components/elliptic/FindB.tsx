@@ -2,12 +2,12 @@ import {
     IonButton, IonCol,
     IonGrid,
     IonIcon, IonInput, IonItem, IonLabel,
-    IonReorder, IonRow, IonTextarea, IonTitle
+    IonReorder, IonRow, IonTextarea
 } from '@ionic/react';
 import './Elliptic.css';
 import { useEffect, useState } from "react";
 import { pizza } from "ionicons/icons";
-import Point, { CalPoints } from './Point';
+import { CalPoints } from './Point';
 import { CalSquareGroup } from './Some';
 export const CalB = (a: string, minB: string, p: string) => {
     const sqr = CalSquareGroup(p.toString());

@@ -7,7 +7,7 @@
  */
 /* IMPORTS */
 import {
-    randomBigIntBits,
+    RandomBigIntBits,
     randomBigIntRange,
 } from "./random-bigint";
 
@@ -29,7 +29,7 @@ export function RandomPrime(bits: number, tests?: number): bigint {
         var found = false;
         while (!found) {
             // Generate a random integer
-            const random = randomBigIntBits(bits);
+            const random = RandomBigIntBits(bits);
 
             // Test its primality
             if (isProbablePrime(random, tests)) {
