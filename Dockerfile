@@ -6,7 +6,7 @@ RUN apk --no-cache add \
     g++ make git \
     ca-certificates \
     && rm -rf /var/cache/apk/*
-
+mm
 RUN mkdir -p /app/api
 WORKDIR /app/api
 
